@@ -50,7 +50,12 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
-
+        // 4.GET (for upcoming marathons)
+        app.get('/upcomingMarathons', async (req, res) => {
+            const cursor = upcomingMarathonCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
