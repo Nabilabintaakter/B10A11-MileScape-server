@@ -44,7 +44,12 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
-
+        // 3.GET (for running marathons-6)
+        app.get('/marathons', async (req, res) => {
+            const cursor = marathonCollection.find().limit(6);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
 
         // Send a ping to confirm a successful connection
