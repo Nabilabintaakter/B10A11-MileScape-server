@@ -27,11 +27,21 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         const marathonCollection = client.db('mileScape').collection('marathons')
+        const upcomingMarathonCollection = client.db('mileScape').collection('upcomingMarathons')
 
-        // POST (for all marathons)
+
+        //  MARATHON RELATED APIs
+        // 1.POST (for all marathons)
         app.post('/marathons', async (req, res) => {
             const newMarathon = req.body;
             const result = await marathonCollection.insertOne(newMarathon);
+            res.send(result);
+        })
+
+        // 2.GET (for all marathons)
+        app.get('/allMarathons', async (req, res) => {
+            const cursor = marathonCollection.find();
+            const result = await cursor.toArray();
             res.send(result);
         })
 
