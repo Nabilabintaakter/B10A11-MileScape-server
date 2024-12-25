@@ -28,6 +28,7 @@ async function run() {
         // await client.connect();
         const marathonCollection = client.db('mileScape').collection('marathons')
         const upcomingMarathonCollection = client.db('mileScape').collection('upcomingMarathons')
+        const marathonRegistrationCollection = client.db('mileScape').collection('marathonRegistrations')
 
 
         //  MARATHON RELATED APIs
@@ -63,6 +64,27 @@ async function run() {
             const result = await marathonCollection.findOne(query);
             res.send(result);
         })
+
+// MARATHON REGISTRATION RELATED APIs
+    // post all data
+    app.post('/marathon-registrations', async(req,res)=>{
+        const registrationData = req.body;
+        // 1.save data in my registrations
+          const result = await marathonRegistrationCollection.insertOne(registrationData);
+        // 2.increase bid count in all-jobs
+        const filter = {_id: new ObjectId(registrationData.marathonId)}
+        const update = {
+          $inc : {totalRegistrations:1}
+        }
+        const updateTotalRegistrations = await marathonCollection.updateOne(filter,update)
+        console.log(updateTotalRegistrations);
+          res.send(result);
+      })
+
+
+
+
+
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
