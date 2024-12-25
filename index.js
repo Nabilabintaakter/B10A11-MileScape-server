@@ -125,8 +125,13 @@ async function run() {
             res.send(result);
         })
 
-
-
+        // DELETE
+        app.delete('/marathon-registrations/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await marathonRegistrationCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
 
