@@ -31,14 +31,15 @@ async function run() {
         const marathonRegistrationCollection = client.db('mileScape').collection('marathonRegistrations')
 
 
-        //  MARATHON RELATED APIs
+        // ----------------------------------- MARATHON RELATED APIs---------------------------------------
+
+
         // 1.POST (for all marathons)
         app.post('/marathons', async (req, res) => {
             const newMarathon = req.body;
             const result = await marathonCollection.insertOne(newMarathon);
             res.send(result);
         })
-
         // 2.GET (for all marathons)
         app.get('/allMarathons', async (req, res) => {
             const cursor = marathonCollection.find();
@@ -64,9 +65,17 @@ async function run() {
             const result = await marathonCollection.findOne(query);
             res.send(result);
         })
+        // 6.GET (for email based marathons)
+        app.get('/myMarathons', async (req, res) => {
+            const { email } = req.query;
+            const query = {organizer_email: email};
+            const cursor = marathonCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
 
 
-// -----------------------------------MARATHON REGISTRATION RELATED APIs--------------------------------
+        // -------------------------------------MARATHON REGISTRATION RELATED APIs--------------------------------
 
         // 1. post all registrations
         app.post('/marathon-registrations', async (req, res) => {
@@ -88,7 +97,6 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
-
         // 3.get specific user's registrations
         app.get('/marathon-registrations', async (req, res) => {
             const email = req.query.email;
@@ -98,10 +106,10 @@ async function run() {
         })
         // 4.Get specific user's single registration by id
         app.get('/marathon-registrations/:id', async (req, res) => {
-            const id = req.params.id; 
-            const query = { _id: new ObjectId(id) }; 
-            const result = await marathonRegistrationCollection.findOne(query); 
-            res.send(result); 
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await marathonRegistrationCollection.findOne(query);
+            res.send(result);
 
         });
         // 5.PUT
@@ -120,7 +128,6 @@ async function run() {
                     additionalInfo: updatedRegistration.additionalInfo,
                 }
             }
-
             const result = await marathonRegistrationCollection.updateOne(filter, marathon, options);
             res.send(result);
         })
