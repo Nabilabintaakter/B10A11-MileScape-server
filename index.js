@@ -65,8 +65,10 @@ async function run() {
             res.send(result);
         })
 
-        // MARATHON REGISTRATION RELATED APIs
-        // post all data
+
+// -----------------------------------MARATHON REGISTRATION RELATED APIs--------------------------------
+
+        // 1. post all registrations
         app.post('/marathon-registrations', async (req, res) => {
             const registrationData = req.body;
             // 1.save data in my apply list
@@ -80,14 +82,51 @@ async function run() {
             console.log(updateTotalRegistrations);
             res.send(result);
         })
+        // 2.GET all registrations
+        app.get('/marathon-registrations', async (req, res) => {
+            const cursor = marathonRegistrationCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
-        // get specific user's data
+        // 3.get specific user's registrations
         app.get('/marathon-registrations', async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
             const result = await marathonRegistrationCollection.find(query).toArray();
             res.send(result);
         })
+        // 4.Get specific user's single registration by id
+        app.get('/marathon-registrations/:id', async (req, res) => {
+            const id = req.params.id; 
+            const query = { _id: new ObjectId(id) }; 
+            const result = await marathonRegistrationCollection.findOne(query); 
+            res.send(result); 
+
+        });
+        // 5.PUT
+        app.put('/marathon-registrations/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedRegistration = req.body;
+            console.log(updatedRegistration);
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const marathon = {
+                $set: {
+                    email: updatedRegistration.email,
+                    firstName: updatedRegistration.firstName,
+                    lastName: updatedRegistration.lastName,
+                    phone: updatedRegistration.phone,
+                    additionalInfo: updatedRegistration.additionalInfo,
+                }
+            }
+
+            const result = await marathonRegistrationCollection.updateOne(filter, marathon, options);
+            res.send(result);
+        })
+
+
+
 
 
 
