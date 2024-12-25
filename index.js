@@ -65,23 +65,29 @@ async function run() {
             res.send(result);
         })
 
-// MARATHON REGISTRATION RELATED APIs
-    // post all data
-    app.post('/marathon-registrations', async(req,res)=>{
-        const registrationData = req.body;
-        // 1.save data in my registrations
-          const result = await marathonRegistrationCollection.insertOne(registrationData);
-        // 2.increase bid count in all-jobs
-        const filter = {_id: new ObjectId(registrationData.marathonId)}
-        const update = {
-          $inc : {totalRegistrations:1}
-        }
-        const updateTotalRegistrations = await marathonCollection.updateOne(filter,update)
-        console.log(updateTotalRegistrations);
-          res.send(result);
-      })
+        // MARATHON REGISTRATION RELATED APIs
+        // post all data
+        app.post('/marathon-registrations', async (req, res) => {
+            const registrationData = req.body;
+            // 1.save data in my apply list
+            const result = await marathonRegistrationCollection.insertOne(registrationData);
+            // 2.increase totalRegistrations in marathons
+            const filter = { _id: new ObjectId(registrationData.marathonId) }
+            const update = {
+                $inc: { totalRegistrations: 1 }
+            }
+            const updateTotalRegistrations = await marathonCollection.updateOne(filter, update)
+            console.log(updateTotalRegistrations);
+            res.send(result);
+        })
 
-
+        // get specific user's data
+        app.get('/marathon-registrations', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email }
+            const result = await marathonRegistrationCollection.find(query).toArray();
+            res.send(result);
+        })
 
 
 
