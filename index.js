@@ -95,7 +95,13 @@ async function run() {
             const result = await marathonCollection.updateOne(filter, marathon, options);
             res.send(result);
         })
-
+        // DELETE
+        app.delete('/myMarathons/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await marathonCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
 
