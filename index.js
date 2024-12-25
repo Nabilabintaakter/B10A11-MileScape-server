@@ -68,11 +68,35 @@ async function run() {
         // 6.GET (for email based marathons)
         app.get('/myMarathons', async (req, res) => {
             const { email } = req.query;
-            const query = {organizer_email: email};
+            const query = { organizer_email: email };
             const cursor = marathonCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
+        // 5.PUT
+        app.put('/myMarathons/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedMarathon = req.body;
+            console.log(updatedMarathon);
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const marathon = {
+                $set: {
+                    title: updatedMarathon.title,
+                    startRegDate: updatedMarathon.startRegDate,
+                    endRegDate: updatedMarathon.endRegDate,
+                    marathonStartDate: updatedMarathon.marathonStartDate,
+                    location: updatedMarathon.location,
+                    distance: updatedMarathon.distance,
+                    description: updatedMarathon.description,
+                    image: updatedMarathon.image,
+                }
+            }
+            const result = await marathonCollection.updateOne(filter, marathon, options);
+            res.send(result);
+        })
+
+
 
 
         // -------------------------------------MARATHON REGISTRATION RELATED APIs--------------------------------
