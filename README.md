@@ -15,7 +15,6 @@ This is the back-end server for the **Milescape - Marathon Management System**. 
 
 ### **Authentication**
 - **JWT Authentication** for secure access to private routes.
-- Password encryption using **bcrypt.js** for added security.
 
 ### **Error Handling**
 - Centralized error handling for all API responses.
@@ -27,7 +26,6 @@ This is the back-end server for the **Milescape - Marathon Management System**. 
 
 ### **Database Management**
 - Built with **MongoDB Atlas** for reliable and scalable data storage.
-- Uses **Mongoose** for schema-based data modeling.
 
 ---
 
