@@ -122,8 +122,9 @@ async function run() {
             res.send(result);
         })
         // 5.GET (for id wise details)
-        app.get('/marathons/:id',verifyToken, async (req, res) => {
+        app.get('/marathons/:id', async (req, res) => {
             const id = req.params.id;
+            console.log(id);
             const query = { _id: new ObjectId(id) }
             const result = await marathonCollection.findOne(query);
             res.send(result);
@@ -139,7 +140,7 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         });
-        // 5.PUT
+        // 5.PUT (for updating)
         app.put('/myMarathons/:id', verifyToken, async (req, res) => {
             const id = req.params.id;
             const updatedMarathon = req.body;
