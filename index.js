@@ -111,7 +111,7 @@ async function run() {
 
         // 3.GET (for running marathons-6)
         app.get('/marathons', async (req, res) => {
-            const cursor = marathonCollection.find().limit(6);
+            const cursor = marathonCollection.find().limit(8);
             const result = await cursor.toArray();
             res.send(result);
         })
